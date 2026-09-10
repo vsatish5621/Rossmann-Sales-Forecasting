@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.venv313/
+
+# DVC cache
+.dvc/cache/
+
+# Large trained models
+models/
+*.joblib
+*.keras
+
+# MLflow local database
+mlflow.db
+
+# Derived/prepared datasets
+train_prepared.csv
+
+# Local Rossmann datasets (tracked by DVC)
+train.csv
+store.csv
+test.csv
+sample_submission.csv
