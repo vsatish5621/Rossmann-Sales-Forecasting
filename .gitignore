@@ -8,8 +8,6 @@ __pycache__/
 .dvc/cache/
 
 # Large trained models
-models/
-*.joblib
 *.keras
 
 # MLflow local database
