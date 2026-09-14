@@ -16,18 +16,35 @@ st.set_page_config(
 # LOAD TRAINED MODELS
 # =========================================================
 
-@st.cache_resource
-def load_models():
-    sales_model = joblib.load(
+# =========================================================
+# MEMORY-OPTIMIZED MODEL PREDICTION
+# =========================================================
+# Community Cloud has a finite memory limit. The two trained
+# Random Forest models are therefore loaded one at a time
+# instead of keeping both large model objects in memory.
+
+def predict_sales(input_data):
+    import gc
+
+    model = joblib.load(
         "models/rossmann_random_forest_20260909_084440.joblib"
     )
-    customer_model = joblib.load(
+    prediction = model.predict(input_data)[0]
+    del model
+    gc.collect()
+    return prediction
+
+
+def predict_customers(input_data):
+    import gc
+
+    model = joblib.load(
         "models/rossmann_customer_random_forest_20260909_105310.joblib"
     )
-    return sales_model, customer_model
-
-
-sales_model, customer_model = load_models()
+    prediction = model.predict(input_data)[0]
+    del model
+    gc.collect()
+    return prediction
 
 # =========================================================
 # APPLICATION HEADER
@@ -226,10 +243,8 @@ if prediction_mode == "📝 Manual Prediction":
         })
 
         # Predictions
-        predicted_sales = max(0, sales_model.predict(input_data)[0])
-        predicted_customers = max(
-            0, customer_model.predict(input_data)[0]
-        )
+        predicted_sales = max(0, predict_sales(input_data))
+        predicted_customers = max(0, predict_customers(input_data))
 
         st.success("Prediction completed successfully!")
 
@@ -419,13 +434,28 @@ else:
                         errors="coerce"
                     )
 
+                # Load each model only for its prediction pass.
+                # This avoids keeping both large Random Forest objects
+                # in Community Cloud memory at the same time.
+                import gc
+
+                sales_model = joblib.load(
+                    "models/rossmann_random_forest_20260909_084440.joblib"
+                )
                 sales_predictions = pd.Series(
                     sales_model.predict(batch_input)
                 ).clip(lower=0)
+                del sales_model
+                gc.collect()
 
+                customer_model = joblib.load(
+                    "models/rossmann_customer_random_forest_20260909_105310.joblib"
+                )
                 customer_predictions = pd.Series(
                     customer_model.predict(batch_input)
                 ).clip(lower=0)
+                del customer_model
+                gc.collect()
 
                 batch_output = batch_input.copy()
                 batch_output["Predicted Sales"] = sales_predictions.values
