@@ -1,193 +1,287 @@
+# Rossmann Sales Forecasting — Project 6 Final Submission
 
-# Rossmann Sales Forecasting
+**Submitted by:** Satish Vonteddu  
+**Program:** Data Analytics Internship — NextHikes IT Solutions  
+**Batch:** L-110226-W2PM-B15  
+**Submission Date:** 15 September 2026
 
-## Project Overview
+## 🚀 Start Here
 
-An end-to-end machine learning project for forecasting Rossmann store sales and customer demand. The project combines exploratory data analysis, machine learning, deep learning, experiment tracking, data versioning, business intelligence, and a Streamlit prediction interface.
+This repository contains the complete final submission for **Project 6 — Rossmann Sales Forecasting**.
 
-## Business Objective
+### 🌐 Live Streamlit Application
 
-Build a forecasting solution capable of predicting daily store sales up to six weeks ahead while considering factors such as promotions, competition, holidays, seasonality, store characteristics, and locality-related information.
+https://rossmann-sales-forecasting-3ajs4nefpwuhytnxunnisq.streamlit.app
 
-## Dataset
+The application supports:
 
-The project uses the Rossmann dataset containing:
-- train.csv
-- test.csv
-- store.csv
-- sample_submission.csv
+- Manual single-store prediction
+- CSV-based batch prediction
+- Predicted Sales
+- Predicted Customers
+- Prediction visualizations
+- Batch prediction CSV download
 
-Training data contains 1,017,209 records and store data contains 1,115 stores.
+---
 
-## Project Workflow
+## 📦 Final Submission
 
-1. Data loading and cleaning
+All evaluator-facing deliverables are available in:
+
+`Final_Submission/`
+
+### 📄 Documentation
+
+- Final Professional PDF
+- Final Professional DOCX
+
+Location:
+
+`Final_Submission/Documentation/`
+
+### 📊 Presentation
+
+Final 25-slide professional presentation.
+
+Location:
+
+`Final_Submission/Presentation/`
+
+### 📓 Notebooks
+
+The project includes five organized notebooks:
+
+1. Data Loading & Cleaning
 2. Exploratory Data Analysis
-3. Feature engineering
-4. Random Forest sales prediction
-5. Prediction interval estimation
-6. LSTM time-series forecasting
-7. Customer prediction
-8. MLflow experiment tracking and model registry
-9. DVC data versioning
-10. Power BI dashboard
-11. Streamlit prediction application
+3. Machine Learning Sales Prediction
+4. LSTM Time Series
+5. MLflow Final Prediction
 
-## Exploratory Data Analysis
+Location:
 
-The analysis examines:
-- Sales and customer distributions
-- Promotion effects
-- Holiday effects
-- Seasonal behavior
-- Sales versus customers
-- Store opening and closing behavior
-- Store types and assortment
+`Final_Submission/Notebooks/`
+
+### 📈 Power BI
+
+Final Power BI dashboard file:
+
+`Final_Submission/PowerBI/Rossmann_Sales_Forecasting.pbix`
+
+Dashboard evidence:
+
+`Final_Submission/Evidence/PowerBI_Final_Dashboard_Evidence.png`
+
+### 📁 Prediction Outputs
+
+Final prediction files:
+
+`Final_Submission/Predictions/`
+
+### 🖼️ Evidence
+
+Project implementation evidence includes:
+
+- Power BI dashboard
+- MLflow model versions
+- Streamlit manual prediction
+- Streamlit CSV batch prediction
+- Prediction details
+
+Location:
+
+`Final_Submission/Evidence/`
+
+### 📋 Official Project Brief
+
+Location:
+
+`Final_Submission/Project_Brief/`
+
+---
+
+## 📊 Project Overview
+
+This project develops an end-to-end **Rossmann Sales Forecasting** solution covering:
+
+- Exploratory Data Analysis
+- Data cleaning and preprocessing
+- Feature engineering
+- Random Forest sales forecasting
+- Customer-demand forecasting
+- LSTM time-series forecasting
+- MLflow experiment tracking and model serialization
+- DVC data versioning
+- Git and Git LFS
+- Power BI business intelligence
+- Streamlit deployment
+
+---
+
+## 🧠 Machine Learning Results
+
+### Random Forest — Sales Forecasting
+
+- **MAE:** 809.24
+- **RMSE:** 1218.28
+- **R²:** 0.8859
+
+### Random Forest — Customer Forecasting
+
+- **MAE:** 60.23
+- **RMSE:** 91.12
+- **R²:** 0.9562
+
+### Multivariate LSTM — Daily Sales Forecasting
+
+- **MAE:** 504,875.09
+- **RMSE:** 669,092.44
+- **R²:** 0.9451
+
+### Final Test Predictions
+
+**41,088 test records** were processed for the final prediction output.
+
+> The Random Forest and LSTM metrics use different modelling granularities and should not be treated as a direct model-to-model comparison.
+
+---
+
+## 🔬 Exploratory Data Analysis
+
+The EDA covers the major business questions specified in the project brief, including:
+
+- Sales and customer purchasing behaviour
+- Train/test distribution comparison
+- Promotion impact
+- Holiday and seasonal behaviour
+- Christmas/Easter seasonality
+- Sales and customer correlation
+- Store opening/closing behaviour
+- Weekday and weekend patterns
+- Assortment impact
 - Competition distance
-- Competition-related information
-- Weekend and weekday behavior
+- Competition-related data patterns
 
-A strong positive relationship was observed between Sales and Customers, with correlation approximately 0.895.
+---
 
-## Machine Learning — Random Forest
+## 🤖 Deep Learning — LSTM
 
-A scikit-learn Pipeline was implemented with:
-- Median imputation for numerical variables
-- Most-frequent imputation for categorical variables
-- One-hot encoding for categorical variables
-- Random Forest Regressor
+A dedicated time-series workflow was implemented using daily aggregated Rossmann sales.
 
-Chronological validation was used:
-- Training: January 2013 to June 2015
-- Validation: July 2015
+The workflow includes:
 
-### Sales Model Results
-
-- MAE: 809.24
-- RMSE: 1218.28
-- R²: 0.8859
-
-The model's strongest feature importance was associated with store operating status, followed by competition distance, promotion, and store information.
-
-An approximate model-based prediction interval was also estimated using the variation among individual Random Forest trees. This is treated as an approximate uncertainty range rather than a formally calibrated confidence interval.
-
-## Customer Prediction
-
-A separate Random Forest model was developed to predict customer numbers.
-
-Validation results:
-- MAE: 60.23
-- RMSE: 91.12
-- R²: 0.9562
-
-## Deep Learning — LSTM
-
-Daily store sales were aggregated into a time series.
-
-Stationarity was evaluated using the Augmented Dickey-Fuller test. The observed p-value was below 0.05, so first-order differencing was not required for this series.
-
-ACF/PACF analysis showed clear weekly seasonality. A 28-day sliding window was therefore selected to cover approximately four weekly cycles.
-
-### Multivariate LSTM
-
-The improved LSTM used:
-- Historical Sales
-- Number of Open Stores
-- Day of Week
-
-Architecture:
-
-Input sequence → LSTM(64) → Dropout(0.2) → Dense(1)
-
-Training used:
-- Adam optimizer
-- Mean Squared Error loss
-- Batch size: 32
-- Maximum epochs: 30
+- Stationarity testing
+- ADF test
+- ACF/PACF analysis
+- Sliding-window creation
+- Min-Max scaling
+- LSTM regression
 - Early stopping
-- Shuffle disabled for time-series ordering
+- Multivariate time-series improvement using operational and day-of-week features
 
-### LSTM Results
+The final multivariate LSTM captured weekly sales patterns and Sunday trough behaviour more effectively than the initial univariate approach.
 
-- MAE: 504,875.09
-- RMSE: 669,092.44
-- R²: 0.9451
+---
 
-The LSTM validation results are based on daily aggregated sales, while the Random Forest sales model operates at store-day level; therefore, the metrics should not be interpreted as a direct apples-to-apples model comparison.
+## ⚙️ MLOps
 
-## MLflow
+### MLflow
 
-MLflow was used for experiment tracking and model management.
+MLflow was used for:
 
-Experiment:
-`Rossmann_Sales_Forecasting`
+- Experiment tracking
+- Parameter logging
+- Metric logging
+- Model artifact logging
+- Model loading for inference
+- Model Registry versioning
 
-Tracked components include:
-- Model parameters
-- Validation metrics
-- Random Forest model artifact
-- LSTM model artifacts
-- Customer model
-- Inference validation
+Evidence:
 
-Registered model:
-`Rossmann_Sales_Forecasting_RF`
+`Final_Submission/Evidence/MLflow_Multiple_Model_Versions.png`
 
-Multiple registry versions were created for the validated Random Forest artifact. Registry Version 2 represents a second model registry release and does not imply retraining.
+> MLflow Registry Version 2 represents a second registry release of the validated artifact; it is not presented as a newly retrained model.
 
-## DVC
+### DVC
 
-DVC was used for dataset version control.
+DVC was used for dataset versioning, including multiple versions of the training data.
 
-Documented data versions:
-- Version 1 — original Rossmann datasets
-- Version 2 — prepared training dataset
+### Git / Git LFS
 
-The Git history and DVC metadata demonstrate that `train.csv` changed between the two versions.
+GitHub is used for project version control, while Git LFS is used for large model artifacts.
 
-## Power BI
+---
 
-A Power BI dashboard was developed using a star-schema approach with:
-- FactSales
-- DimDate
-- DimStore
+## 📈 Power BI
 
-The dashboard includes sales, customers, store counts, average sales per customer, time analysis, store-type analysis, and interactive slicers.
+A Power BI dashboard was created as the business intelligence layer of the project.
 
-## Streamlit Application
+It includes:
 
-A Streamlit web interface was developed for interactive predictions.
+- Sales KPIs
+- Customer KPIs
+- Store analysis
+- Date analysis
+- Store Type analysis
+- Interactive slicers
+- Business-oriented visualizations
 
-Inputs include:
-- Store ID
-- Prediction date
-- Store status
-- Promotion
-- State holiday
-- School holiday
-- Store type
-- Assortment
-- Competition distance
-- Competition opening information
-- Promo2 information
+Power BI file:
 
-The application predicts:
-- Sales
-- Customers
+`Final_Submission/PowerBI/Rossmann_Sales_Forecasting.pbix`
 
-It also provides prediction details and CSV download functionality.
+---
 
-## Project Structure
+## 🚀 Streamlit Deployment
+
+The deployed application provides an end-to-end prediction interface.
+
+### Live Application
+
+https://rossmann-sales-forecasting-3ajs4nefpwuhytnxunnisq.streamlit.app
+
+The application supports:
+
+1. **Manual Prediction**
+2. **CSV Batch Prediction**
+
+The batch workflow provides:
+
+- Input CSV upload
+- Sales prediction
+- Customer prediction
+- Prediction charts
+- Results table
+- Downloadable prediction CSV
+
+Application source:
+
+`app.py`
+
+---
+
+## 📁 Repository Structure
 
 ```text
 Rossmann-Sales-Forecasting/
+│
+├── README.md
+├── app.py
+├── requirements.txt
+│
+├── models/
+├── notebooks/
+│
 ├── .dvc/
 ├── .dvcignore
+├── .gitattributes
 ├── .gitignore
-├── app.py
-├── train.csv.dvc
-├── test.csv.dvc
-├── store.csv.dvc
-├── sample_submission.csv.dvc
-└── LICENSE
-
+│
+└── Final_Submission/
+    │
+    ├── Documentation/
+    ├── Presentation/
+    ├── Notebooks/
+    ├── PowerBI/
+    ├── Predictions/
+    ├── Evidence/
+    └── Project_Brief/
